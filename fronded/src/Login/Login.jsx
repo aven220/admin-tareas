@@ -34,6 +34,7 @@ function Login({ setUsuarios }) {
         });
         console.log(response.data);
         setError(false);
+        // No se activa la redirección aquí
       } catch (error) {
         console.error(error);
         setError(true);
@@ -72,70 +73,25 @@ function Login({ setUsuarios }) {
         {registerMode && (
           <>
             <div className="input-group">
-              <input
-                type="text"
-                placeholder="Cédula"
-                value={cedula}
-                onChange={(e) => setCedula(e.target.value)}
-                required
-              />
+              <input type="text" placeholder="Cédula" value={cedula} onChange={(e) => setCedula(e.target.value)} required/>
             </div>
             <div className="input-group">
-              <input
-                type="text"
-                placeholder="Nombre de usuario"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
+              <input type="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="input-group">
-              <input
-                type="email"
-                placeholder="Correo electrónico"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Celular"
-                value={celular}
-                onChange={(e) => setCelular(e.target.value)}
-                required
-              />
+              <input type="text" placeholder="Celular" value={celular} onChange={(e) => setCelular(e.target.value)} required />
             </div>
           </>
         )}
         <div className="input-group">
-          <input
-            type="text"
-            placeholder="Nombre de usuario"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required={!registerMode}
-          />
+          <input type="text" placeholder="Nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)} required={!registerMode} />
         </div>
         <div className="input-group">
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         {registerMode && (
           <div className="input-group">
-            <input
-              type="password"
-              placeholder="Confirmar contraseña"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <input type="password" placeholder="Confirmar contraseña" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
           </div>
         )}
         <button type="submit" className="submit-button">

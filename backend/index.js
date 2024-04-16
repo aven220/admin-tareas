@@ -14,7 +14,7 @@ const db = mysql.createConnection({
 });
 
 const port = 3001;
-
+// Crear nuevo usuario
 app.post('/crear', (req, res) => {
     const id_cedula = req.body.id_cedula;
     const nombre_usuario = req.body.nombre_usuario;
@@ -45,6 +45,7 @@ app.post('/crear', (req, res) => {
     });
 });
 
+//Login usuario
 app.post('/login', (req, res) => {
     const login_usuario = req.body.login_usuario;
     const contrasena_usuario = req.body.contrasena_usuario;
@@ -60,6 +61,29 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
+// Ruta para crear una nueva tarea
+app.post('/crearTarea', (req, res) => {
+    const { nombre_tarea, descripcion_tarea, fechavencimiento_tarea, observacion_tarea } = req.body;
+
+    const fecharegistro_tarea = new Date();
+    const id_tipotarea_tarea = 1;
+    const id_estadotarea_tarea = 1;
+
+    db.query('INSERT INTO tareas (nombre_tarea, descripcion_tarea, fecharegistro_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [nombre_tarea, descripcion_tarea, fecharegistro_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Error interno del servidor');
+            } else {
+                res.send('Tarea creada exitosamente');
+            }
+        }
+    );
+});
+
+
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);

@@ -1,6 +1,6 @@
-// TaskForm.jsx
 import { useState, useContext, useEffect } from "react";
 import { TaskContext } from "../context/TaskContext";
+import Header from '../Login/Header';
 
 function TaskForm() {
     const [titulo, setTitulo] = useState('');
@@ -11,6 +11,7 @@ function TaskForm() {
     const [error, setError] = useState(false);
     const [fechaActual, setFechaActual] = useState('');
     const [notificacion, setNotificacion] = useState(false);
+    const [observaciones, setObservaciones] = useState('');
 
     useEffect(() => {
         const fechaEntrega = new Date(fecha);
@@ -24,20 +25,56 @@ function TaskForm() {
         }
     }, [fecha]);
 
+
+
+    //Guardar tarea
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (descripcion === '' || fecha === '' || titulo === '') {
-            setError(true);
-            return;
+
+        if (descripcion === '' || fecha === '' || titulo === '' || observaciones === '') {
+          setError(true);
+          return;
         }
         setError(false);
+        
         handleFechaActual();
+        
         crearTarea({ titulo, descripcion, fecha, hora, fechaActual });
         setTitulo('');
         setDescripcion('');
         setFecha('');
         setHora('');
-    };
+        setObservaciones('');
+
+        guardarEnBaseDeDatos();
+      };
+      
+      const guardarEnBaseDeDatos = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/crearTarea', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              nombre_tarea: titulo,
+              descripcion_tarea: descripcion,
+              fechavencimiento_tarea: fecha,
+              observacion_tarea: observaciones,
+              id_cedula_tarea: '' 
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al guardar la información en la base de datos');
+          }
+
+          console.log('Tarea guardada exitosamente en la base de datos');
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      
 
     const handleFechaActual = () => {
         const fechaActual = new Date();
@@ -48,6 +85,8 @@ function TaskForm() {
     };
 
     return (
+        <>
+        <div><Header /></div>
         <div className="max-w-md mx-auto">
             <form onSubmit={handleSubmit} className="bg-slate-400 p-10 mb-4">
                 <h1 className="text-2xl font-bold text-white mb-5 text-center titulo">CREAR TAREA</h1>
@@ -75,15 +114,12 @@ function TaskForm() {
                     value={fecha}
                     onChange={(e) => setFecha(e.target.value)}
                 />
-                <input
+                <textarea
                     style={{ color: 'black' }}
                     className="bg-slate-300 p-3 w-full mb-2"
-                    type="time"
-                    value={hora}
-                    onChange={(e) => {
-                        setHora(e.target.value);
-                        handleFechaActual();
-                    }}
+                    placeholder="Observaciones de la tarea"
+                    value={observaciones}
+                    onChange={(e) => setObservaciones(e.target.value)}
                 />
                 {notificacion && <p style={{ color: 'yellow' }}>¡Faltan 5 días para la fecha de entrega!</p>}
                 {error && <p style={{ color: 'red' }}>Llene toda la información</p>}
@@ -91,7 +127,9 @@ function TaskForm() {
                 <button className='bg-indigo-700 px-3 py-1 text-white' type="submit">Guardar</button>
             </form>
         </div>
+        </>
     );
 }
 
 export default TaskForm;
+
