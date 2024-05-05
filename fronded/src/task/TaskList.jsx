@@ -1,19 +1,34 @@
-// TaskList.jsx
-import { useContext } from "react";
+import { useState, useEffect } from "react";
 import TaskCard from "./TaskCard";
-import { TaskContext } from "../context/TaskContext";
 
-function TaskList() {
-    const { tareas } = useContext(TaskContext);
+function TaskList({ usuarios }) {
+    const [tareas, setTareas] = useState([]);
 
-    if (tareas.length === 0) {
-        return <h1 className="text-4xl font-bold text-white mb-5 text-center">No hay tareas pendientes</h1>;
-    }
+    useEffect(() => {
+        obtenerTareas();
+    }, [usuarios]);
+
+    const obtenerTareas = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/tareas/${usuarios}`);
+            if (!response.ok) {
+                throw new Error("Error al obtener las tareas del servidor");
+            }
+            const data = await response.json();
+            setTareas(data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const agregarTarea = (nuevaTarea) => {
+        setTareas([...tareas, nuevaTarea]);
+    };
 
     return (
         <div className="grid grid-cols-4 gap-2">
-            {tareas.map((t) => (
-                <TaskCard key={t.id} t={t} />
+            {tareas.map((tarea) => (
+                <TaskCard key={tarea.id_tarea} tarea={tarea} />
             ))}
         </div>
     );

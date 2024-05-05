@@ -1,7 +1,7 @@
 import Taskform from "./task/Taskform";
 import TaskList from "./task/TaskList";
 import { useState } from 'react';
-import Login from "./Login/Login"
+import Login from "./Login/Login";
 
 function App() {
   const [usuarios, setUsuarios] = useState([]);
@@ -10,7 +10,7 @@ function App() {
     return (
       <>
         <Taskform usuarios={usuarios}/>
-        <TaskList />
+        <TaskList usuarios={usuarios}/>
       </>
     );
   }
@@ -19,7 +19,7 @@ function App() {
     <div className="bg-zinc-900 h-screen">
       <div className="container mx-auto p-10">
         <div className='App'>
-          {!usuarios.length > 0 ? <Login setUsuarios={setUsuarios} /> : menu()}
+          {usuarios.length === 0 ? <Login setUsuarios={setUsuarios} /> : menu()}
         </div>      
       </div>
     </div>

@@ -17,7 +17,6 @@ export function TaskContextProvider(props) {
             id: tareas.length + 1,
             descripcion: t.descripcion,
             fecha: t.fecha,
-            hora: t.hora,
             fechaActual: t.fechaActual
         }]);
     };

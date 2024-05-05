@@ -34,7 +34,6 @@ function Login({ setUsuarios }) {
         });
         console.log(response.data);
         setError(false);
-        // No se activa la redirección aquí
       } catch (error) {
         console.error(error);
         setError(true);
@@ -42,16 +41,17 @@ function Login({ setUsuarios }) {
     } else {
       try {
         const response = await Axios.post('http://localhost:3001/login', {
-          login_usuario: username,
-          contrasena_usuario: password
+            login_usuario: username,
+            contrasena_usuario: password
         });
-        console.log(response.data);
+        console.log('Inicio de sesión exitoso. El ID de cédula es:', response.data.id_cedula);
         setError(false);
-        setUsuarios([response.data.username]);
-      } catch (error) {
+        setUsuarios([response.data.id_cedula]); 
+    } catch (error) {
         console.error(error);
         setError(true);
-      }
+    }
+    
     }
   };
 

@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { TaskContext } from "../context/TaskContext";
 import Header from '../Login/Header';
 
-function TaskForm() {
+function TaskForm({usuarios}) {
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [fecha, setFecha] = useState('');
@@ -12,6 +12,8 @@ function TaskForm() {
     const [fechaActual, setFechaActual] = useState('');
     const [notificacion, setNotificacion] = useState(false);
     const [observaciones, setObservaciones] = useState('');
+    const [id_cedula, setId_cedula] = useState(usuarios);
+  
 
     useEffect(() => {
         const fechaEntrega = new Date(fecha);
@@ -26,8 +28,6 @@ function TaskForm() {
     }, [fecha]);
 
 
-
-    //Guardar tarea
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -61,7 +61,7 @@ function TaskForm() {
               descripcion_tarea: descripcion,
               fechavencimiento_tarea: fecha,
               observacion_tarea: observaciones,
-              id_cedula_tarea: '' 
+              nombre_usuario_tarea:id_cedula, 
             })
           });
 
@@ -87,6 +87,7 @@ function TaskForm() {
     return (
         <>
         <div><Header /></div>
+        {/* <p>CEDULA ES : {id_cedula}</p> */}
         <div className="max-w-md mx-auto">
             <form onSubmit={handleSubmit} className="bg-slate-400 p-10 mb-4">
                 <h1 className="text-2xl font-bold text-white mb-5 text-center titulo">CREAR TAREA</h1>

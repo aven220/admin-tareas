@@ -50,28 +50,31 @@ app.post('/login', (req, res) => {
     const login_usuario = req.body.login_usuario;
     const contrasena_usuario = req.body.contrasena_usuario;
 
-    db.query('SELECT * FROM usuarios WHERE login_usuario = ? AND contrasena_usuario = ?', [login_usuario, contrasena_usuario], (err, result) => {
+    db.query('SELECT id_cedula FROM usuarios WHERE login_usuario = ? AND contrasena_usuario = ?', [login_usuario, contrasena_usuario], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send('Error interno del servidor');
         } else if (result.length === 0) {
             res.status(401).send('Correo o contraseña incorrectos');
         } else {
-            res.send('Inicio de sesión exitoso');
+            const id_cedula = result[0].id_cedula;
+            res.send({ id_cedula }); 
         }
     });
 });
 
+
+
 // Ruta para crear una nueva tarea
 app.post('/crearTarea', (req, res) => {
-    const { nombre_tarea, descripcion_tarea, fechavencimiento_tarea, observacion_tarea } = req.body;
+    const { nombre_tarea, descripcion_tarea, fechavencimiento_tarea, observacion_tarea, nombre_usuario_tarea } = req.body;
 
     const fecharegistro_tarea = new Date();
     const id_tipotarea_tarea = 1;
     const id_estadotarea_tarea = 1;
 
-    db.query('INSERT INTO tareas (nombre_tarea, descripcion_tarea, fecharegistro_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [nombre_tarea, descripcion_tarea, fecharegistro_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea],
+    db.query('INSERT INTO tareas (nombre_tarea, descripcion_tarea, fecharegistro_tarea, nombre_usuario_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [nombre_tarea, descripcion_tarea, fecharegistro_tarea, nombre_usuario_tarea, fechavencimiento_tarea, observacion_tarea, id_tipotarea_tarea, id_estadotarea_tarea],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -83,6 +86,21 @@ app.post('/crearTarea', (req, res) => {
     );
 });
 
+app.get('/tareas/:id_cedula', (req, res) => {
+    const id_cedula = req.params.id_cedula;
+
+    db.query('SELECT * FROM tareas WHERE nombre_usuario_tarea = ?', [id_cedula], (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error interno del servidor');
+      } else {
+        console.log("Tareas encontradas:", result); 
+        res.json(result);
+      }
+    });
+  });
+  
+  
 
 
 app.listen(port, () => {
