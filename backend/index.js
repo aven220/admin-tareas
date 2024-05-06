@@ -100,6 +100,20 @@ app.get('/tareas/:id_cedula', (req, res) => {
     });
   });
   
+  app.delete('/eliminarTareas/:id_tarea', (req, res) => {
+    const id_tarea = req.params.id_tarea;
+
+    db.query('DELETE FROM tareas WHERE id_tarea = ?', [id_tarea], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error interno del servidor');
+        } else {
+            console.log("Tarea eliminada:", id_tarea); 
+            res.status(200).send('Tarea eliminada correctamente');
+        }
+    });
+});
+
   
 
 

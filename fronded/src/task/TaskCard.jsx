@@ -1,88 +1,89 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import TaskState from "./TaskState";
-import { TaskContext } from "../context/TaskContext";
 
-function TaskCard({ tarea, agregarTarea }) {
-    const { eliminarTarea, modificarTarea } = useContext(TaskContext);
-    const [mostrarInfo, setMostrarInfo] = useState(false);
-    const [mostrarInfoCompleta, setMostrarInfoCompleta] = useState(false);
-    const [modificar, setModificar] = useState(false);
+function TaskCard({ tarea, eliminarTarea }) {
+  const [mostrarInfo, setMostrarInfo] = useState(false);
+  const [mostrarInfoCompleta, setMostrarInfoCompleta] = useState(false);
+  const [modificar, setModificar] = useState(false);
 
-    const handleVerInfo = () => {
-        setMostrarInfo(true);
-        setMostrarInfoCompleta(true);
-    };
+  const handleVerInfo = () => {
+    setMostrarInfo(true);
+    setMostrarInfoCompleta(true);
+  };
 
-    const handleOcultarInfo = () => {
-        setMostrarInfo(false);
-        setMostrarInfoCompleta(false);
-    };
+  const handleOcultarInfo = () => {
+    setMostrarInfo(false);
+    setMostrarInfoCompleta(false);
+  };
 
-    const handleModificar = () => {
-        setModificar(true);
-    };
+  const handleModificar = () => {
+    setModificar(true);
+  };
 
-    const guardarNuevaTarea = async () => {
-        // Lógica para guardar la nueva tarea
-        // Después de guardar la tarea con éxito
-        // Llamar a la función agregarTarea con la nueva tarea como argumento
-        const nuevaTarea = {/* Datos de la nueva tarea */};
-        agregarTarea(nuevaTarea);
-    };
+  const handleEliminarTarea = async () => {
+    try {
+      await eliminarTarea(tarea.id_tarea); 
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
+    }
+  };
 
-    return (
-        <div className="bg-gray-800 text-white">
-            {!modificar && (
-                <>
-                    <h1 className="text-xl font-bold capitalize">{tarea.nombre_tarea}</h1>
-                    <TaskState />
-                    {mostrarInfoCompleta && (
-                        <>
-                            <h3 className="text-gray-500 text-sm">{tarea.descripcion_tarea}</h3>
-                            <p>Pendiente para: </p>
-                            <h3 style={{ color: "yellow" }}>{tarea.fechavencimiento_tarea}</h3>
-                            <p>Fecha de creación: </p>
-                            <h3>{tarea.fecharegistro_tarea}</h3>
-                        </>
-                    )}
-                    {!mostrarInfo && (
-                        <button
-                            type="submit"
-                            className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
-                            style={{ backgroundColor: "green" }}
-                            onClick={handleVerInfo}
-                        >
-                            Ver
-                        </button>
-                    )}
-                    {mostrarInfo && (
-                        <>
-                            <button
-                                className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
-                                onClick={handleOcultarInfo}
-                            >
-                                Ocultar
-                            </button>
-                            <button
-                                type="submit"
-                                className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
-                                style={{ color: "white", backgroundColor: "green" }}
-                                onClick={handleModificar}
-                            >
-                                Modificar
-                            </button>
-                        </>
-                    )}
-                    <button
-                        className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
-                        onClick={guardarNuevaTarea}
-                    >
-                        Guardar tarea
-                    </button>
-                </>
-            )}
-        </div>
-    );
+  return (
+    <div className="bg-gray-800 text-white">
+      {!modificar && (
+        <>
+          <h1 className="text-xl font-bold capitalize">{tarea.nombre_tarea}</h1>
+          <TaskState id_estadotarea_tarea={tarea.id_estadotarea_tarea}/>
+          {mostrarInfoCompleta && (
+            <>
+            <p>Descripcion tarea</p>
+              <h3 className="text-gray-500 text-sm">{tarea.descripcion_tarea}</h3>
+              <p>Observacion tarea</p>
+              <h3 className="text-gray-500 text-sm">{tarea.observacion_tarea}</h3>
+              <p>Pendiente para: </p>
+              <h3 style={{ color: "yellow" }}>{tarea.fechavencimiento_tarea}</h3>
+              <p>Fecha de creación: </p>
+              <h3>{tarea.fecharegistro_tarea}</h3>
+            </>
+          )}
+          {!mostrarInfo && (
+            <button
+              type="submit"
+              className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
+              style={{ backgroundColor: "green" }}
+              onClick={handleVerInfo}
+            >
+              Ver
+            </button>
+          )}
+          {mostrarInfo && (
+            <>
+              <button
+                className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
+                onClick={handleOcultarInfo}
+              >
+                Ocultar
+              </button>
+              <button
+                type="submit"
+                className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
+                style={{ color: "white", backgroundColor: "green" }}
+                onClick={handleModificar}
+              >
+                Modificar
+              </button>
+            </>
+          )}
+          <button
+            className="bg-red-500 px-5 py-1 rounded-md mt-4 hover:bg-red-400"
+            onClick={handleEliminarTarea}
+          >
+            Eliminar tarea
+          </button>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default TaskCard;

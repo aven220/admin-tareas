@@ -1,5 +1,4 @@
-// TaskContextProvider.jsx
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { tareas as data } from "../Tareas";
 
 export const TaskContext = createContext();

@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { TaskContext } from "../context/TaskContext";
 import Header from '../Login/Header';
+import TaskList from "./TaskList";
 
 function TaskForm({usuarios}) {
     const [titulo, setTitulo] = useState('');
@@ -126,6 +127,7 @@ function TaskForm({usuarios}) {
                 {error && <p style={{ color: 'red' }}>Llene toda la información</p>}
 
                 <button className='bg-indigo-700 px-3 py-1 text-white' type="submit">Guardar</button>
+                <TaskList/>
             </form>
         </div>
         </>
